@@ -33,7 +33,7 @@ export default defineNuxtConfig({
     // for the upcoming preset
     firebase: {
       gen: 2,
-      nodeVersion: '18',
+      nodeVersion: '20',
     },
   },
 
@@ -51,7 +51,8 @@ export default defineNuxtConfig({
     },
     auth: {
       enabled: true,
-      sessionCookie: true,
+      // no cookie minting means no SSR on authenticated pages
+      sessionCookie: false,
     },
 
     // appCheck: {
@@ -85,6 +86,10 @@ export default defineNuxtConfig({
     '/admin': { ssr: false },
     '/login': { ssr: false },
     '/analytics': { ssr: false },
+    // removed because of sessionCookie: false
+    '/users': { ssr: false },
+    '/posts/new': { ssr: false },
+    '/emoji-panel': { ssr: false },
     // you don't need to add ssr: true to any route, it's the default
     // '/users': { ssr: true },
     // '/posts/new': { ssr: true },
