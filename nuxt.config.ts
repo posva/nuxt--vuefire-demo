@@ -49,25 +49,26 @@ export default defineNuxtConfig({
         },
       },
     },
-    auth: true,
-
-    appCheck: {
-      provider: 'ReCaptchaV3',
-      // site key, NOT secret key
-      key: '6LeS5q0nAAAAABH3u13ntLwuIOkiNjHlXJOXoN5T',
-      isTokenAutoRefreshEnabled: true,
+    auth: {
+      enabled: true,
+      sessionCookie: true,
     },
 
+    // appCheck: {
+    //   provider: 'ReCaptchaV3',
+    //   // site key, NOT secret key
+    //   key: '6LeS5q0nAAAAABH3u13ntLwuIOkiNjHlXJOXoN5T',
+    //   isTokenAutoRefreshEnabled: true,
+    // },
+
     config: {
-      apiKey: 'AIzaSyBsdR5gT1fFBF5c8YDUw_4Qcg2E_C9Pwn8',
-      authDomain: 'nuxt-vuefire-example-blaze.firebaseapp.com',
-      databaseURL:
-        'https://nuxt-vuefire-example-blaze-default-rtdb.firebaseio.com',
-      projectId: 'nuxt-vuefire-example-blaze',
-      storageBucket: 'nuxt-vuefire-example-blaze.appspot.com',
-      messagingSenderId: '254121855253',
-      appId: '1:254121855253:web:c1e3357402843d829e411c',
-      measurementId: 'G-LL0HQ2E3J2',
+      apiKey: 'AIzaSyDNQlDniNjhsUcU0yMw4lzUv7hXovjUVF0',
+      authDomain: 'nuxtotravez.firebaseapp.com',
+      databaseURL: 'https://nuxtotravez-default-rtdb.firebaseio.com',
+      projectId: 'nuxtotravez',
+      storageBucket: 'nuxtotravez.appspot.com',
+      messagingSenderId: '180069394096',
+      appId: '1:180069394096:web:d1fc10341b516650207d75',
     },
   },
 
