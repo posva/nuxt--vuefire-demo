@@ -49,7 +49,12 @@
     {
       "source": ".output/server",
       "codebase": "default",
-      "ignore": [".git", "firebase-debug.log", "firebase-debug.*.log"]
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log"
+      ]
     }
   ]
 }
