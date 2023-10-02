@@ -70,8 +70,8 @@ const {
           v-model="content"
           :maxlength="512"
           required
-          @keypress.enter.meta.exact="createNote()"
-          @keypress.enter.ctrl.exact="createNote()"
+          @keydown.enter.meta.exact="createNote()"
+          @keydown.enter.ctrl.exact="createNote()"
         />
 
         <input type="submit" value="Save Note" />
