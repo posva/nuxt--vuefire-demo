@@ -13,8 +13,6 @@ const user = useCurrentUser()
 const db = useFirestore()
 
 definePageMeta({
-  linkTitle: 'New Note',
-  order: 4,
   // only authenticated users can access this page
   middleware: ['authenticated'],
 })
@@ -34,6 +32,7 @@ const {
   execute: createNote,
   isLoading: isCreatingNote,
   error,
+  // this gives us a loading state while the note is being created
 } = useAsyncState(
   () => {
     // avoid empty posts that will fail on Firestore anyway
@@ -58,6 +57,8 @@ const {
 <template>
   <main>
     <h2>Create a new Note</h2>
+
+    <p>These notes can only be viewed by yourself.</p>
 
     <ErrorBox v-if="error" :error="error" />
 

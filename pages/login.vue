@@ -5,11 +5,9 @@ export const googleAuthProvider = new GoogleAuthProvider()
 
 <script lang="ts" setup>
 import {
-  getRedirectResult,
   signInAnonymously,
   signInWithPopup,
-  signInWithRedirect,
-  signOut,
+  onAuthStateChanged,
 } from 'firebase/auth'
 import {
   useCurrentUser,
@@ -17,20 +15,11 @@ import {
   useIsCurrentUserLoaded,
 } from 'vuefire'
 
-definePageMeta({
-  linkTitle: 'Login',
-  order: 2,
-})
-
 const auth = useFirebaseAuth()! // only exists on client side
-const user = useCurrentUser()
+const route = useRoute()
 const isUserLoaded = useIsCurrentUserLoaded()
-function signinRedirect() {
-  signInWithRedirect(auth, googleAuthProvider).catch((reason) => {
-    console.error('Failed signinRedirect', reason)
-    error.value = reason
-  })
-}
+// display errors if any
+const error = ref<Error | null>(null)
 
 function signinPopup() {
   error.value = null
@@ -40,29 +29,28 @@ function signinPopup() {
   })
 }
 
-// display errors if any
-const error = ref<Error | null>(null)
-// only on client side
 onMounted(() => {
-  getRedirectResult(auth).catch((reason) => {
-    console.error('Failed redirect result', reason)
-    error.value = reason
+  onAuthStateChanged(auth, (user) => {
+    if (user && !route.query.redirect) {
+      navigateTo('/profile')
+    }
   })
 })
-
-const route = useRoute()
 </script>
 
 <template>
   <main>
     <h2>Login</h2>
 
+    <p>Choose a login method:</p>
+
     <ClientOnly>
-      <p v-if="!isUserLoaded">Loading</p>
+      <p v-if="!isUserLoaded">Loading...</p>
     </ClientOnly>
 
     <ErrorBox v-if="error" :error="error" />
 
+    <!-- We were redirected from a page that required auth -->
     <div v-else-if="route.query.redirect" class="message-box">
       <p>
         Please login to access <code>{{ route.query.redirect }}</code
@@ -70,32 +58,8 @@ const route = useRoute()
       </p>
     </div>
 
-    <template v-if="user">
-      <div>
-        You are currently logged in as:
-        <br />
-        <img
-          class="avatar"
-          v-if="user.photoURL"
-          :src="user.photoURL"
-          referrerpolicy="no-referrer"
-        />
-        <br />
-        <strong
-          >{{ user.isAnonymous ? '🥸' : '' }} {{ user.displayName }}.</strong
-        >
-      </div>
-
-      <button @click="signOut(auth)">Logout</button>
-    </template>
-
-    <template v-else>
-      <button @click="signinRedirect()">SignIn with Google (redirect)</button>
-      <br />
-      <button @click="signinPopup()">SignIn with Google (popup)</button>
-      <!-- <br /> -->
-      <!-- <button @click="signInAnonymously(auth)">SignIn Anonymously</button> -->
-    </template>
+    <button @click="signinPopup()">SignIn with Google</button>
+    <button @click="signInAnonymously(auth)">SignIn Anonymously</button>
   </main>
 </template>
 
@@ -104,7 +68,7 @@ const route = useRoute()
   padding: 1em 0;
 }
 
-main > button {
-  margin: 1em 0;
+main > button:not(:last-of-type(button)) {
+  margin-right: 1em;
 }
 </style>

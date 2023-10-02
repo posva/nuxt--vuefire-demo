@@ -82,14 +82,17 @@ watch(user, async (currentUser, previousUser) => {
     </a>
   </div>
 
-  <h1>Nuxt + VueFire</h1>
+  <h1>Nuxt VueFire</h1>
 
   <NavigationLinks />
 
   <NuxtPage />
 
   <footer>
-    <a href="https://github.com/posva/nuxt--vuefire-example-blaze-plan">
+    <code>vuefire@{{ vuefireVersion }}</code> -
+    <code>nuxt-vuefire@{{ nuxtVuefireVersion }}</code>
+    <br />
+    <a href="https://github.com/posva/nuxt--vuefire-demo">
       <img
         src="@/assets/github-mark.svg"
         alt="GitHub logo"

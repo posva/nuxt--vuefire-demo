@@ -1,3 +1,17 @@
+import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
+
+const __dirname = new URL('.', import.meta.url).pathname
+const vuefirePkg = JSON.parse(
+  readFileSync(resolve(__dirname, 'node_modules/vuefire/package.json'), 'utf-8')
+)
+const nuxtVuefirePkg = JSON.parse(
+  readFileSync(
+    resolve(__dirname, 'node_modules/nuxt-vuefire/package.json'),
+    'utf-8'
+  )
+)
+
 export default defineNuxtConfig({
   // Having SSR allows us to use `nuxt generate`, turn it off if you don't care
   ssr: true,
@@ -5,7 +19,7 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      title: 'Nuxt + VueFire Blaze Plan Example',
+      title: 'Nuxt VueFire Demo',
       link: [
         {
           href: 'https://cdn.jsdelivr.net/npm/water.css@2/out/water.css',
@@ -23,11 +37,6 @@ export default defineNuxtConfig({
   css: ['~/assets/style.css'],
 
   nitro: {
-    prerender: {
-      // these routes are not dependent on any data and can be prerendered
-      // it's a good idea to pre render all routes that you can
-      routes: ['/', '/analytics'],
-    },
     preset: 'firebase',
 
     // for the upcoming preset
@@ -55,12 +64,11 @@ export default defineNuxtConfig({
       sessionCookie: false,
     },
 
-    // appCheck: {
-    //   provider: 'ReCaptchaV3',
-    //   // site key, NOT secret key
-    //   key: '6LeS5q0nAAAAABH3u13ntLwuIOkiNjHlXJOXoN5T',
-    //   isTokenAutoRefreshEnabled: true,
-    // },
+    appCheck: {
+      provider: 'ReCaptchaEnterprise',
+      // site key, NOT secret key
+      key: '6LfYrWwoAAAAAG0STXT3cs1AEEPRNyg2llU4cTIS',
+    },
 
     config: {
       apiKey: 'AIzaSyDNQlDniNjhsUcU0yMw4lzUv7hXovjUVF0',
@@ -70,11 +78,21 @@ export default defineNuxtConfig({
       storageBucket: 'nuxtotravez.appspot.com',
       messagingSenderId: '180069394096',
       appId: '1:180069394096:web:d1fc10341b516650207d75',
+      measurementId: 'G-7LQM93XBHP',
     },
   },
 
   experimental: {
     payloadExtraction: false,
+  },
+
+  //this is just to show the versions on the page
+  runtimeConfig: {
+    public: {
+      // to show the versions in the app
+      vuefireVersion: vuefirePkg.version,
+      nuxtVuefireVersion: nuxtVuefirePkg.version,
+    },
   },
 
   // Customize this to your needs and try to server side render only what is needed
@@ -83,16 +101,18 @@ export default defineNuxtConfig({
     // Make some pages client only (since we have an SPA)
     // useful for authenticated pages that require the user to be logged in to be
     // displayed
-    '/admin': { ssr: false },
-    '/login': { ssr: false },
-    '/analytics': { ssr: false },
-    // removed because of sessionCookie: false
-    '/users': { ssr: false },
-    '/posts/new': { ssr: false },
-    '/emoji-panel': { ssr: false },
-    // you don't need to add ssr: true to any route, it's the default
-    // '/users': { ssr: true },
-    // '/posts/new': { ssr: true },
-    // '/emoji-panel': { swr: true },
+
+    // these routes are not dependent on any data and can be prerendered
+    // it's a good idea to pre render all routes that you can
+    '/': { prerender: true },
+    '/login': { prerender: true },
+
+    // Note SWR is not supported on all Hosting Providers
+    '/counter': { swr: 5 }, // time in seconds
+
+    // these routes require authentication and can't be prerendered
+    // we disabled auth.sessionCookie so they will be client only
+    '/notes': { ssr: false },
+    '/profile': { ssr: false },
   },
 })

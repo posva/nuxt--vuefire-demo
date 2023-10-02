@@ -1,24 +1,24 @@
 <script lang="ts" setup>
-const router = useRouter()
-const routes = computed(() =>
-  router
-    .getRoutes()
-    .filter((route) => !route.path.includes(':') && route.meta.linkTitle)
-    .sort((a, b) => (Number(a.meta.order) || 0) - (Number(b.meta.order) || 0))
-    .map((route) => ({
-      to: route.name ? { name: route.name } : route.path,
-      text: route.meta.linkTitle || route.name || route.path,
-    }))
-)
+const user = useCurrentUser()
 </script>
 
 <template>
   <nav class="links">
     <ul>
-      <li v-for="route in routes">
-        <NuxtLink :to="route.to" v-slot="{ href }">{{
-          route.text || href
-        }}</NuxtLink>
+      <li>
+        <NuxtLink to="/">Home</NuxtLink>
+      </li>
+      <li>
+        <NuxtLink to="/counter">Daily Counter</NuxtLink>
+      </li>
+      <li v-if="user">
+        <NuxtLink to="/profile">Profile</NuxtLink>
+      </li>
+      <li v-else>
+        <NuxtLink to="/login">Login</NuxtLink>
+      </li>
+      <li>
+        <NuxtLink to="/notes">Notes</NuxtLink>
       </li>
     </ul>
   </nav>

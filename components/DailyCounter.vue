@@ -97,11 +97,7 @@ function fromNow(date: Timestamp) {
 </template>
 
 <style scoped>
-.read-the-docs {
-  color: #888;
-}
-
 .card {
-  padding: 2em 0;
+  padding: 1rem 0;
 }
 </style>
