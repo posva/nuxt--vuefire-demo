@@ -41,7 +41,10 @@ service cloud.firestore {
     match /count/{day} {
       allow read;
       // only allow writing { when: now timestamp; n: int }
-      allow write: if request.resource.data.size() == 2 && request.resource.data.when is timestamp && request.resource.data.n is int;
+      allow write: if request.resource.data.size() == 2
+        && request.resource.data.when == request.time
+        && request.resource.data.n is int
+      ;
     }
 
     // forbid everything else
